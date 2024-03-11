@@ -11,7 +11,7 @@
 
     <!-- Styles -->
     <style>
-        /*! normalize.css v8.0.1 | MIT License | /necolas/normalize.css */
+        /*! normalize.css v8.0.1 | MIT License | //normalize.css */
         html {
             line-height: 1.15;
             -webkit-text-size-adjust: 100%
