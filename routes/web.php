@@ -24,14 +24,6 @@ Route::get('/', function () {
 });
 
 
-Route::get('/dashboard', function () {
-    if (auth()->user()->hasRole('student')) {
-        return redirect()->route('student.course');
-    }
-    if (auth()->user()->hasRole('teacher')) {
-        return redirect()->route('courses.index');
-    }
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
