@@ -15,10 +15,14 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+/**
+ * registr qismidagi student roll
+ */
 
 Route::get('/', function () {
     return view('welcome');
 });
+
 
 Route::get('/dashboard', function () {
     if (auth()->user()->hasRole('student')) {
