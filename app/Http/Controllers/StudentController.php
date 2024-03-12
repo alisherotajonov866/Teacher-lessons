@@ -18,7 +18,48 @@ class StudentController extends Controller
         $this->middleware('role:teacher')->only('studentStatus', 'students', 'studentStatus', 'studentDelete');
     }
 
+    public function myCourses(Request $request)
+    {
+        $category = $request->get('category');
+        $search = $request->get('search');
+        if ($category) {
+            $course = Course::where('category_id', $category)->pluck('id');
+            $courses = Booking::with('course', 'teacher')->where('student_id', auth()->user()->id)->whereIn('course_id', $course)->paginate(6)->withQueryString();
+        } else {
+            $courses = Booking::with('course', 'teacher')->where('student_id', auth()->user()->id)->paginate(6)->withQueryString();
+        }
+        if ($search) {
+            $course = Course::where('title', 'like', '%' . $search . '%')->pluck('id');
+            $courses = Booking::with('course', 'teacher')->where('student_id', auth()->user()->id)->whereIn('course_id', $course)->paginate(6)->withQueryString();
+        }
+        $categories = Category::all();
+        return view('students.my-courses', compact('courses', 'categories'));
+    }
 
+    public function course(Request $request)
+    {
+        $search = $request->get('search');
+        $category = $request->get('category');
+        if ($category) {
+            $courses = Course::where('category_id', $category)->paginate(6)->withQueryString();
+        } else {
+            $courses = Course::paginate(6)->withQueryString();
+        }
+        if ($search) {
+            $courses = Course::where('title', 'like', '%' . $search . '%')->paginate(6)->withQueryString();
+        }
+        $categories = Category::all();
+        return view('students.course', compact('courses', 'categories'));
+    }
+
+    public function courseDetail($id)
+    {
+        $course = Course::with('lessons')->find($id);
+        $course->views = $course->views + 1;
+        $course->save();
+        $categories = Category::all();
+        return view('students.course-detail', compact('course', 'categories'));
+    }
 
     public function courseLessons($id)
     {
